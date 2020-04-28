@@ -5,11 +5,11 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
-public class UserDB extends SQLiteOpenHelper {
-    public UserDB(Context context){super(context,"user_db",null,1);}
+public class ProjectManagerDB extends SQLiteOpenHelper {
+    public ProjectManagerDB(Context context){super(context,"user_db",null,1);}
 
     public void onCreate(SQLiteDatabase sqLiteDatabase){
-        String sql = "create table user(id integer primary key autoincrement, username varchar(20), password varchar(20))";
+        String sql = "create table manager(id integer primary key autoincrement, username varchar(20), password varchar(20))";
         sqLiteDatabase.execSQL(sql);
     }
 
@@ -19,12 +19,12 @@ public class UserDB extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("username",username);
         contentValues.put("password",password);
-        sqLiteDatabase.insert("user",null,contentValues);
+        sqLiteDatabase.insert("manager",null,contentValues);
         sqLiteDatabase.close();
     }
 
     public void delete(SQLiteDatabase sqLiteDatabase,int id){
-        sqLiteDatabase.delete("user","id=?",new String[]{id+""});
+        sqLiteDatabase.delete("manager","id=?",new String[]{id+""});
         sqLiteDatabase.close();
     }
 
@@ -32,7 +32,7 @@ public class UserDB extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put("username",username);
         contentValues.put("password",password);
-        sqLiteDatabase.update("user",contentValues,"id=?",new String[]{id+""});
+        sqLiteDatabase.update("manager",contentValues,"id=?",new String[]{id+""});
         sqLiteDatabase.close();
     }
 
