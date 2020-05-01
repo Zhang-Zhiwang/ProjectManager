@@ -2,13 +2,18 @@ package edu.hdu.zzw.projectmanager;
 
 import androidx.annotation.IntDef;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Record {
     private int id;
     private int host_id;
     private String host_name;
-    private Date date;
+    private String date;
+    //Android的SqLite中的数据是弱类型存储的。以String取出，再转化成日期类型的
+    //数据库以Date存储，Bean以String存储，输入String sqLite可以转换为Date，输出时又是String，如果需要比较大小，则再将String转成Date
+    SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     //替代enum
     public static final int ISPROJECT = 0;
@@ -26,7 +31,7 @@ public class Record {
 
     public Record() {}
 
-    public Record(int id, Date date, int host_id, String host_name, @HostType int hostType, @State int state, String description) {
+    public Record(int id, String date, int host_id, String host_name, @HostType int hostType, @State int state, String description) {
         this.id = id;
         this.date = date;
         this.host_id = host_id;
@@ -36,6 +41,8 @@ public class Record {
         this.description = description;
     }
 
+
+    //getter
     public int getId() {
         return id;
     }
@@ -62,6 +69,11 @@ public class Record {
         return description;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    //setter
     public void setId(int id) {
         this.id = id;
     }
@@ -86,15 +98,12 @@ public class Record {
         this.description = description;
     }
 
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public String toString(){
+    //单击任务/项目列表，观察其中记录，其listview所用函数toString
+    public String toString() {
         String type = "",s = "";
         switch (hostType){
             case ISPROJECT: type = new String("项目");break;
@@ -111,6 +120,12 @@ public class Record {
         }
         String str = date.toString()+" :" + type + host_name + s + ",备注： " + description;
         return str;
+    }
+
+    public Date toDate() throws ParseException {
+        Date d = new Date();
+        d = (Date)simpleDateFormat.parse(this.date);
+        return d;
     }
 }
 

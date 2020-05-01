@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,17 +15,22 @@ public class Manager {
     private List<String> ProjectList;
     private List<String> TaskList;
 
-    public Manager() {}
+    public Manager() {
+        ProjectList = new ArrayList<String>();
+        TaskList = new ArrayList<String>();
+    }
     public Manager(int id, String name, String password, String projectList, String taskList) {
         this.id = id;
         this.name = name;
         this.password = password;
         String[] p = projectList.split(",");
         this.ProjectList = Arrays.asList(p);
+        //this.ProjectList = new ArrayList<>(this.ProjectList);
         String[] t = taskList.split(",");
         this.TaskList = Arrays.asList(t);
     }
 
+    //getter
     public int getId() {
         return id;
     }
@@ -45,6 +51,7 @@ public class Manager {
         return TaskList;
     }
 
+    //setter
     public void setId(int id) {
         this.id = id;
     }
@@ -67,6 +74,13 @@ public class Manager {
         this.TaskList = Arrays.asList(t);
     }
 
+    public void setProjectList(List<String> projectList) {
+        ProjectList = projectList;
+    }
+
+    public void setTaskList(List<String> taskList) {
+        TaskList = taskList;
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     public String ProjectList_toString() {
