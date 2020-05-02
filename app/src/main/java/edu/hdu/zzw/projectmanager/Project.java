@@ -28,7 +28,7 @@ public class Project {
         this.RecordList = new ArrayList<String>();
         this.TaskList = new ArrayList<String>();
     }
-    public Project(int id, String name,String description,String manager_Name,int manager_ID,String tasklist){
+    /*public Project(int id, String name,String description,String manager_Name,int manager_ID,String tasklist){
         this.id = id;
         this.name = name;
         this.description = description;
@@ -36,9 +36,9 @@ public class Project {
         this.Manager_Name = manager_Name;
         String[] str = tasklist.split(",");
         this.TaskList = Arrays.asList(str);
-    }
+    }*/
 
-    public Project(int id, String name, String description, String manager_Name, int manager_ID, String startTime, String endTime, String recordTime, String recordList, String taskList) {
+    public Project(int id, String name, int manager_ID, String manager_Name, String description, String taskList, String recordList, String startTime, String endTime, String recordTime) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -47,10 +47,16 @@ public class Project {
         StartTime = startTime;
         EndTime = endTime;
         RecordTime = recordTime;
-        String [] str1 = recordList.split(",");
-        RecordList = Arrays.asList(str1);
-        String [] str2 = taskList.split(",");
-        TaskList = Arrays.asList(str2);
+        if(recordList.equals("")) RecordList = new ArrayList<String>();
+        else {
+            String [] str1 = recordList.split(",");
+            RecordList = new ArrayList<String>(Arrays.asList(str1));
+        }
+        if(taskList.equals("")) TaskList = new ArrayList<String>();
+        else{
+            String [] str2 = taskList.split(",");
+            TaskList = new ArrayList<String>(Arrays.asList(str2));
+        }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -140,13 +146,19 @@ public class Project {
     }
 
     public void setRecordList(String recordList) {
-        String [] str = recordList.split(",");
-        RecordList = Arrays.asList(str);
+        if(recordList.equals("")) RecordList = new ArrayList<String>();
+        else{
+            String [] str = recordList.split(",");
+            RecordList = new ArrayList<String>(Arrays.asList(str));
+        }
     }
 
     public void setTaskList(String tasklist) {
-        String [] str = tasklist.split(",");
-        this.TaskList = Arrays.asList(str);
+        if(tasklist.equals("")) TaskList = new ArrayList<String>();
+        else{
+            String [] str = tasklist.split(",");
+            this.TaskList = new ArrayList<String>(Arrays.asList(str));
+        }
     }
 
     public void setRecordList(List<String> recordList) {

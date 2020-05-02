@@ -31,7 +31,7 @@ public class Record {
 
     public Record() {}
 
-    public Record(int id, String date, int host_id, String host_name, @HostType int hostType, @State int state, String description) {
+    public Record(int id, int host_id, String host_name, String date, String description, @HostType int hostType, @State int state) {
         this.id = id;
         this.date = date;
         this.host_id = host_id;

@@ -26,7 +26,7 @@ public class Task {
     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
 
-    public Task(int id, String name, int managerID, String managerName, int projectID, String projectName, String description, String startTime, String endTime, String recordTime, String recordList) {
+    public Task(int id, String name, int managerID, String managerName, int projectID, String projectName, String description, String recordList, String startTime, String endTime, String recordTime) {
         this.id = id;
         this.name = name;
         ManagerID = managerID;
@@ -37,8 +37,11 @@ public class Task {
         StartTime = startTime;
         EndTime = endTime;
         RecordTime = recordTime;
-        String [] str = recordList.split(",");
-        RecordList = Arrays.asList(str);
+        if(recordList.equals("")) RecordList = new ArrayList<String>();
+        else{
+            String [] str = recordList.split(",");
+            RecordList = new ArrayList<String> (Arrays.asList(str));
+        }
     }
 
     public Task() {
@@ -134,8 +137,11 @@ public class Task {
     }
 
     public void setRecordList(String recordList) {
-        String[] str = recordList.split(",");
-        RecordList = Arrays.asList(str);
+        if(recordList.equals("")) RecordList = new ArrayList<String>();
+        else{
+            String[] str = recordList.split(",");
+            RecordList = new ArrayList<String>(Arrays.asList(str));
+        }
     }
 
     public void setRecordList(List<String> recordList) {
