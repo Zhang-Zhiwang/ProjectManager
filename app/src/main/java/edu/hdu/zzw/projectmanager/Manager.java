@@ -4,11 +4,13 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class Manager {
+/**使用Serializable接口可以直接使用intent传递对象*/
+public class Manager implements Serializable {
     private int id;
     private String name;
     private String password;
@@ -31,6 +33,22 @@ public class Manager {
      * **/
     public Manager(int id, String name, String password, String projectList, String taskList) {
         this.id = id;
+        this.name = name;
+        this.password = password;
+        if(projectList.equals("")) ProjectList = new ArrayList<String>();
+        else {
+            String[] p = projectList.split(",");
+            this.ProjectList = new ArrayList<String>(Arrays.asList(p));
+        }
+        if(taskList.equals("")) TaskList = new ArrayList<String>();
+        else {
+            String[] t = taskList.split(",");
+            this.TaskList = new ArrayList<String>(Arrays.asList(t));
+        }
+    }
+
+    public Manager( String name, String password, String projectList, String taskList) {
+        //this.id = id;
         this.name = name;
         this.password = password;
         if(projectList.equals("")) ProjectList = new ArrayList<String>();

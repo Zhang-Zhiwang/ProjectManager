@@ -14,6 +14,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ProjectManagerDB extends SQLiteOpenHelper {
+
+    /**
+     * 单例模式
+     * 避免多线程出错
+     * */
+    private static ProjectManagerDB mInstance = null;
+
+    public static ProjectManagerDB getInstance(Context context) {
+        if(mInstance == null) {
+            mInstance = new ProjectManagerDB(context);
+        }
+        return mInstance;
+    }
+
     public ProjectManagerDB(Context context){super(context,"user_db",null,1);}
 
     public void onCreate(SQLiteDatabase sqLiteDatabase){
