@@ -17,6 +17,12 @@
     <ListView
         android:id="@+id/project_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
+        android:layout_height="496dp" />
+
+    <Button
+        android:id="@+id/createproject"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="新建项目" />
 
 </LinearLayout>

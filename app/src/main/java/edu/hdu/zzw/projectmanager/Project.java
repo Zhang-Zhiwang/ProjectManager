@@ -4,6 +4,7 @@ import android.os.Build;
 
 import androidx.annotation.RequiresApi;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
-public class Project {
+public class Project implements Serializable {
     private int id;
     private String name;
     private String description;//项目描述

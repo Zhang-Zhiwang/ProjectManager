@@ -1,5 +1,6 @@
 package edu.hdu.zzw.projectmanager;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -7,6 +8,13 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -23,6 +31,15 @@ public class ProjectListFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    private View view;
+    private Manager manager;
+    private Project[] projects;
+    private ListView projectList;
+    private Button button;
+
+    private ProjectManagerDB projectManagerDB;
+    private SQLiteDatabase sqLWrite;
 
     public ProjectListFragment() {
         // Required empty public constructor
@@ -59,6 +76,29 @@ public class ProjectListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_project_list, container, false);
+        view = inflater.inflate(R.layout.fragment_project_list, container, false);
+        Bundle bundle = getArguments();
+        manager = (Manager) bundle.getSerializable("manager");
+        projectList = (ListView) view.findViewById(R.id.project_list);
+        projectManagerDB = ProjectManagerDB.getInstance(getActivity());
+        sqLWrite = projectManagerDB.getWritableDatabase();
+        List<Project> list = projectManagerDB.FindProjectListByIdList(sqLWrite,manager.getProjectList());
+        projects = list.toArray(new Project[list.size()]);
+        projectList.setAdapter(new MyAdapter());
+        return view;
+    }
+
+    class MyAdapter extends BaseAdapter {
+        public int getCount() {return projects.length;}
+        public Object getItem(int i) {return projects[i];}
+        public long getItemId(int i) {return i;}
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            view = View.inflate(getActivity(), R.layout.project_item, null);
+            TextView project_name = (TextView) view.findViewById(R.id.project_name);
+            TextView manager_name = (TextView) view.findViewById(R.id.manager_name);
+            project_name.setText(projects[i].getName());
+            manager_name.setText(projects[i].getManager_Name());
+            return view;
+        }
     }
 }

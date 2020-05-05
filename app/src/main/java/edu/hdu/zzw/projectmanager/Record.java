@@ -2,11 +2,12 @@ package edu.hdu.zzw.projectmanager;
 
 import androidx.annotation.IntDef;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class Record {
+public class Record implements Serializable {
     private int id;
     private int host_id;
     private String host_name;
