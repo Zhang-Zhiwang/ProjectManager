@@ -1,12 +1,23 @@
 package edu.hdu.zzw.projectmanager;
 
+import android.app.DatePickerDialog;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
+import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 
 /**
@@ -23,6 +34,13 @@ public class ProjectCreateFragment extends Fragment {
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+    private View view;
+    private Manager manager;
+    private Button create_btn, select_start_btn, select_end_btn;
+    EditText project_name, description;
+    TextView startTime, endTime;
+    ProjectManagerDB projectManagerDB;
+    SQLiteDatabase sqLWrite;
 
     public ProjectCreateFragment() {
         // Required empty public constructor
@@ -59,6 +77,86 @@ public class ProjectCreateFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_project_create, container, false);
+        view =  inflater.inflate(R.layout.fragment_project_create, container, false);
+        Bundle bundle = getArguments();
+        manager = (Manager) bundle.getSerializable("manager");
+        projectManagerDB = ProjectManagerDB.getInstance(getActivity());
+        sqLWrite = projectManagerDB.getWritableDatabase();
+        initView(view);
+        final Calendar ca = Calendar.getInstance();
+        final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        select_start_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        ca.set(Calendar.YEAR,year);
+                        ca.set(Calendar.MONTH,month);
+                        ca.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                        startTime.setText(sdf.format(ca.getTime()));
+                    }
+                },ca.get(Calendar.YEAR), ca.get(Calendar.MONTH), ca.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+
+        });
+
+        select_end_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                DatePickerDialog datePickerDialog = new DatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        ca.set(Calendar.YEAR,year);
+                        ca.set(Calendar.MONTH,month);
+                        ca.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                        endTime.setText(sdf.format(ca.getTime()));
+                    }
+                },ca.get(Calendar.YEAR), ca.get(Calendar.MONTH), ca.get(Calendar.DAY_OF_MONTH));
+                datePickerDialog.show();
+            }
+        });
+
+        create_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String projectName = project_name.getText().toString();
+                String start_time = startTime.getText().toString();
+                String end_time = endTime.getText().toString();
+                String _description = description.getText().toString();
+                String recordTime = sdf.format(ca.getTime());
+                if(projectName.length() == 0 || start_time.length() == 0 || end_time.length() == 0)
+                    Toast.makeText(getActivity(),"请输入项目名或选择时间",Toast.LENGTH_SHORT).show();
+                else {
+                    Project re = projectManagerDB.FindProjectByName(sqLWrite, projectName);
+                    if(re != null) {
+                        Toast.makeText(getActivity(),"该项目已存在，请重新输入项目名称",Toast.LENGTH_SHORT).show();
+                    }
+                    else {
+                        Project project = new Project(projectName,manager.getId(),manager.getName(),_description,"","",start_time,end_time,recordTime);
+                        projectManagerDB.add_project(sqLWrite, project);
+                        Project project1 = projectManagerDB.FindProjectByName(sqLWrite, projectName);
+                        manager.getProjectList().add(project1.getId()+"");
+                        projectManagerDB.update_manager(sqLWrite,manager);
+                        Toast.makeText(getActivity(),"项目创建成功",Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+
+            }
+        });
+
+        return view;
+    }
+
+    void initView(View view) {
+        project_name = (EditText)view.findViewById(R.id.project_name);
+        description = (EditText)view.findViewById(R.id.description);
+        startTime = (TextView)view.findViewById(R.id.starttime);
+        endTime = (TextView)view.findViewById(R.id.endtime);
+        select_start_btn = (Button)view.findViewById(R.id.select_start_time);
+        select_end_btn = (Button)view.findViewById(R.id.select_end_time);
+        create_btn = (Button)view.findViewById(R.id.createproject);
     }
 }

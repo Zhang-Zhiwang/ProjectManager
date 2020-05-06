@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -37,12 +36,26 @@ public class ProjectListFragment extends Fragment {
     private Project[] projects;
     private ListView projectList;
     private Button button;
+    private OnButtonClick onButtonClick;
+    private List<Project> list;
+    //ProjectCreateFragment projectCreateFragment;
 
     private ProjectManagerDB projectManagerDB;
     private SQLiteDatabase sqLWrite;
 
     public ProjectListFragment() {
         // Required empty public constructor
+    }
+
+    //创建项目按钮回调
+    public interface OnButtonClick {
+        public void onClick(View view) ;
+    }
+    public OnButtonClick getOnButtonClick() {
+        return onButtonClick;
+    }
+    public void setOnButtonClick(OnButtonClick onButtonClick) {
+        this.onButtonClick = onButtonClick;
     }
 
     /**
@@ -82,9 +95,18 @@ public class ProjectListFragment extends Fragment {
         projectList = (ListView) view.findViewById(R.id.project_list);
         projectManagerDB = ProjectManagerDB.getInstance(getActivity());
         sqLWrite = projectManagerDB.getWritableDatabase();
-        List<Project> list = projectManagerDB.FindProjectListByIdList(sqLWrite,manager.getProjectList());
+        list = projectManagerDB.FindProjectListByIdList(sqLWrite,manager.getProjectList());
         projects = list.toArray(new Project[list.size()]);
         projectList.setAdapter(new MyAdapter());
+        button = view.findViewById(R.id.createproject);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(onButtonClick != null) {
+                    onButtonClick.onClick(button);
+                }
+            }
+        });
         return view;
     }
 
@@ -99,6 +121,18 @@ public class ProjectListFragment extends Fragment {
             project_name.setText(projects[i].getName());
             manager_name.setText(projects[i].getManager_Name());
             return view;
+        }
+    }
+
+    public void onHiddenChanged(boolean hidden) {
+        super.onHiddenChanged(hidden);
+        if(hidden) {}
+        else {
+            /**切换到顶部，获得焦点，需要刷新数据*/
+            manager = projectManagerDB.FindManagerByID(sqLWrite, manager.getId());
+            list = projectManagerDB.FindProjectListByIdList(sqLWrite, manager.getProjectList());
+            projects = list.toArray(new Project[list.size()]);
+            projectList.setAdapter(new MyAdapter());
         }
     }
 }

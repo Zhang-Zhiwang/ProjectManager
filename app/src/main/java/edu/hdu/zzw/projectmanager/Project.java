@@ -60,13 +60,32 @@ public class Project implements Serializable {
         }
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    public Project( String name, int manager_ID, String manager_Name, String description, String taskList, String recordList, String startTime, String endTime, String recordTime) {
+        //this.id = id;
+        this.name = name;
+        this.description = description;
+        Manager_Name = manager_Name;
+        Manager_ID = manager_ID;
+        StartTime = startTime;
+        EndTime = endTime;
+        RecordTime = recordTime;
+        if(recordList.equals("")) RecordList = new ArrayList<String>();
+        else {
+            String [] str1 = recordList.split(",");
+            RecordList = new ArrayList<String>(Arrays.asList(str1));
+        }
+        if(taskList.equals("")) TaskList = new ArrayList<String>();
+        else{
+            String [] str2 = taskList.split(",");
+            TaskList = new ArrayList<String>(Arrays.asList(str2));
+        }
+    }
+
     public String TaskList_toString(){
         String str = String.join(",", TaskList);
         return str;
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public String RecordList_toString() {
         String str = String.join(",",TaskList);
         return str;

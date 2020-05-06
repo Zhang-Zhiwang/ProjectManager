@@ -98,7 +98,6 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
     }
 
     //向数据库添加一行project数据，一般用于单击button添加project，检测重复
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void add_project(SQLiteDatabase sqLiteDatabase, Project project) {
         ContentValues values = new ContentValues();
         //values.put("id",project.getId());
@@ -634,5 +633,43 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
 
+    /**今天新建project才想起来要去修改manager的list，errr，传入对象，用getter获取id，再进行修改*/
+    public void update_manager(SQLiteDatabase sqLiteDatabase, Manager manager) {
+        ContentValues values = new ContentValues();
+        values.put("username",manager.getName());
+        values.put("password",manager.getPassword());
+        values.put("projectlist",manager.ProjectList_toString());
+        values.put("tasklist",manager.TaskList_toString());
+        sqLiteDatabase.update("manager",values,"id=?",new String[]{manager.getId()+""});
+    }
+
+    public void update_project(SQLiteDatabase sqLiteDatabase, Project project) {
+        ContentValues values = new ContentValues();
+        values.put("projectname",project.getName());
+        values.put("manager_id",project.getManager_ID());
+        values.put("manager_name",project.getManager_Name());
+        values.put("description",project.getDescription());
+        values.put("tasklist",project.TaskList_toString());
+        values.put("recordlist",project.RecordList_toString());
+        values.put("starttime",project.getStartTime());
+        values.put("endtime",project.getEndTime());
+        values.put("recordtime",project.getRecordTime());
+        sqLiteDatabase.update("project",values,"id=?",new String[]{project.getId()+""});
+    }
+
+    public void update_task(SQLiteDatabase sqLiteDatabase, Task task) {
+        ContentValues values = new ContentValues();
+        values.put("taskname",task.getName());
+        values.put("manager_id",task.getManagerID());
+        values.put("manager_name",task.getManagerName());
+        values.put("project_id",task.getProjectID());
+        values.put("project_name",task.getProjectName());
+        values.put("description", task.getDescription());
+        values.put("recordlist",task.RecordList_toString());
+        values.put("starttime",task.getStartTime());
+        values.put("endtime",task.getEndTime());
+        values.put("recordtime",task.getRecordTime());
+        sqLiteDatabase.update("task",values,"id=?",new String[] {task.getId()+""});
+    }
 
 }

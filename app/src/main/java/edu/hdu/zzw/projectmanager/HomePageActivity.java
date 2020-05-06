@@ -6,6 +6,7 @@ import androidx.fragment.app.FragmentTransaction;
 //import android.app.FragmentManager;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -19,6 +20,10 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
     private ProjectListFragment pl;
     private TaskListFragment tl;
     private SearchFragment se;
+    private ProjectCreateFragment pc;
+    private TaskCreateFragment tc;
+    private ProjectFragment p;
+    private TaskFragment t;
     private FragmentManager fragmentManager;
 
     Manager manager;
@@ -33,6 +38,27 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
         menuBar.setOnCheckedChangeListener(this);
         menuBtn = (RadioButton)findViewById(R.id.project_btn);
         menuBtn.setChecked(true);
+        pl.setOnButtonClick(new ProjectListFragment.OnButtonClick() {
+            @Override
+            public void onClick(View view) {
+                menuBar.clearCheck();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                hideAllFragment(fragmentTransaction);
+                Bundle bundle = new Bundle();
+                String ManagerJson = getIntent().getStringExtra("manager");
+                manager = new Gson().fromJson(ManagerJson,Manager.class);
+                bundle.putSerializable("manager",manager);
+                if(pc == null) {
+                    pc = new ProjectCreateFragment();
+                    pc.setArguments(bundle);
+                    fragmentTransaction.add(R.id.fg_content,pc);
+                }
+                else {
+                    fragmentTransaction.show(pc);
+                }
+                fragmentTransaction.commit();
+            }
+        });
     }
 
 
@@ -83,5 +109,9 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
         if(pl != null)fragmentTransaction.hide(pl);
         if(tl != null)fragmentTransaction.hide(tl);
         if(se != null)fragmentTransaction.hide(se);
+        if(pc != null)fragmentTransaction.hide(pc);
+        if(tc != null)fragmentTransaction.hide(tc);
+        if(p != null)fragmentTransaction.hide(p);
+        if(t != null)fragmentTransaction.hide(t);
     }
 }
