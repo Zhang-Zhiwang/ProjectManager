@@ -23,8 +23,8 @@ public class Record implements Serializable {
     @interface HostType{}
     private @HostType int hostType;
 
-    public static final int CREATED = 0, DOING = 1, PAUSE = 2, FINISH = 3, CANCEL = 4;
-    @IntDef({CREATED,DOING,PAUSE,FINISH,CANCEL})
+    public static final int CREATED = 0, START = 1, DOING = 2, PAUSE = 3, FINISH = 4, CANCEL = 5;
+    @IntDef({CREATED,START,DOING,PAUSE,FINISH,CANCEL})
     @interface State{}
     private @State int state;
 
@@ -34,6 +34,16 @@ public class Record implements Serializable {
 
     public Record(int id, int host_id, String host_name, String date, String description, @HostType int hostType, @State int state) {
         this.id = id;
+        this.date = date;
+        this.host_id = host_id;
+        this.host_name = host_name;
+        this.hostType = hostType;
+        this.state = state;
+        this.description = description;
+    }
+
+    public Record( int host_id, String host_name, String date, String description, @HostType int hostType, @State int state) {
+        //this.id = id;
         this.date = date;
         this.host_id = host_id;
         this.host_name = host_name;
@@ -113,6 +123,7 @@ public class Record implements Serializable {
         }
         switch (state){
             case CREATED: s = new String("已创建");break;
+            case START: s = new String("已开始");break;
             case DOING: s = new String("进行中");break;
             case PAUSE: s = new String("已暂停");break;
             case FINISH: s = new String("已完成");break;

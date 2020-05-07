@@ -7,6 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Build;
 import android.os.strictmode.SqliteObjectLeakedViolation;
+import android.util.Log;
 
 import androidx.annotation.RequiresApi;
 
@@ -85,7 +86,6 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
 
     /**增**/
     //向数据库添加一行manager数据，一般用于注册界面，使用前需要检测username是否重复
-    @RequiresApi(api = Build.VERSION_CODES.O)
     public void add_manager(SQLiteDatabase sqLiteDatabase, Manager manager) {
         ContentValues values = new ContentValues();
         //values.put("id",manager.getId());
@@ -94,6 +94,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
         values.put("projectlist",manager.ProjectList_toString());
         values.put("tasklist",manager.TaskList_toString());
         sqLiteDatabase.insert("manager",null,values);
+        Log.i("DBA",manager.TaskList_toString());
         //sqLiteDatabase.close();
     }
 
@@ -133,7 +134,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
     }
 
     //自动获取时间，无name字段，无需检测
-    public void add_record(SQLiteDatabase sqLiteDatabase, Record record) {
+    public int add_record(SQLiteDatabase sqLiteDatabase, Record record) {
         ContentValues values = new ContentValues();
         values.put("host_id", record.getHost_id());
         values.put("host_name",record.getHost_name());
@@ -141,7 +142,8 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
         values.put("description", record.getDescription());
         values.put("hosttype",record.getHostType());
         values.put("state",record.getState());
-        sqLiteDatabase.insert("record",null,values);
+        return (int)sqLiteDatabase.insert("record",null,values);
+
         //sqLiteDatabase.close();
     }
 
@@ -162,13 +164,14 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
                 name = cursor.getString(1);
                 password = cursor.getString(2);
                 projectList = FixNull(cursor.getString(3));
-                taskList = FixNull(cursor.getColumnName(4));
+                taskList = FixNull(cursor.getString(4));
                 ManagerList.add(new Manager(id,name,password,projectList,taskList));
             }
             cursor.close();
             return ManagerList;
         }
         else {
+            cursor.close();
             return new ArrayList<Manager>();
         }
     }
@@ -182,8 +185,9 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
             String name = cursor.getString(1);
             String password = cursor.getString(2);
             String projectList = FixNull(cursor.getString(3));
-            String taskList = FixNull(cursor.getColumnName(4));
+            String taskList = FixNull(cursor.getString(4));
             Manager manager = new Manager(id,name,password,projectList,taskList);
+            Log.i("DBS",manager.TaskList_toString());
             cursor.close();
             return manager;
         }
@@ -202,7 +206,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
             //String name = cursor.getString(1);
             String password = cursor.getString(2);
             String projectList = FixNull(cursor.getString(3));
-            String taskList = FixNull(cursor.getColumnName(4));
+            String taskList = FixNull(cursor.getString(4));
             Manager manager = new Manager(id,name,password,projectList,taskList);
             cursor.close();
             return manager;
@@ -349,6 +353,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
             String endTime = cursor.getString(8);
             String recordTime = cursor.getString(9);
             Project project = new Project(id,name,manager_id,manager_name,description,taskList,recordList,startTime,endTime,recordTime);
+            cursor.close();
             return project;
         }
         else {
@@ -373,6 +378,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
             String endTime = cursor.getString(8);
             String recordTime = cursor.getString(9);
             Project project = new Project(id,projectName,manager_id,manager_name,description,taskList,recordList,startTime,endTime,recordTime);
+            cursor.close();
             return project;
         }
         else {
@@ -498,6 +504,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
             String endTime = cursor.getString(8);
             String recordTime = cursor.getString(10);
             Task task = new Task(id,taskName,manager_id,manager_name,projectId,projectName,description,recordList,startTime,endTime,recordTime);
+            cursor.close();
             return task;
         }
         else {
@@ -523,6 +530,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
             String endTime = cursor.getString(8);
             String recordTime = cursor.getString(10);
             Task task = new Task(id,taskName,manager_id,manager_name,projectId,projectName,description,recordList,startTime,endTime,recordTime);
+            cursor.close();
             return task;
         }
         else {
@@ -570,6 +578,26 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
                 cursor.close();
                 return new ArrayList<Record>();
             }
+        }
+    }
+
+    public Record FindRecordByID(SQLiteDatabase sqLiteDatabase, int id) {
+        Cursor cursor = sqLiteDatabase.query("record",null,"id=?",new String[]{id+""},null,null,null);
+        if(cursor.getCount() > 0) {
+            cursor.moveToFirst();
+            int host_id = cursor.getInt(1);
+            String host_name = cursor.getString(2);
+            String date = cursor.getString(3);
+            String description = cursor.getString(4);
+            int host_type = cursor.getInt(5);
+            int state = cursor.getInt(6);
+            Record record = new Record(id,host_id,host_name,date,description,host_type,state);
+            cursor.close();
+            return record;
+        }
+        else {
+            cursor.close();
+            return null;
         }
     }
 

@@ -20,7 +20,7 @@
         android:layout_height="496dp" />
 
     <Button
-        android:id="@+id/createproject"
+        android:id="@+id/create_project"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="新建项目" />

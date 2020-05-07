@@ -11,18 +11,19 @@
     <EditText
         android:id="@+id/description"
         android:layout_width="180dp"
-        android:layout_height="40dp"
+        android:layout_height="60dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/textView12"
-        app:layout_constraintTop_toBottomOf="@+id/managername" />
+        app:layout_constraintTop_toBottomOf="@+id/manager_name" />
 
     <TextView
         android:id="@+id/textView12"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="60dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="项目描述"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -30,7 +31,7 @@
     <TextView
         android:id="@+id/textView8"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="20dp"
         android:gravity="center"
         android:text="项目详情"
         app:layout_constraintEnd_toEndOf="parent"
@@ -38,20 +39,22 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/managername"
+        android:id="@+id/manager_name"
         android:layout_width="180dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/project_name" />
 
     <TextView
         android:id="@+id/textView10"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="项目负责人"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
@@ -59,18 +62,20 @@
     <TextView
         android:id="@+id/project_name"
         android:layout_width="180dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="12dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView7"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="30dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="12dp"
+        android:gravity="center"
         android:text="项目名称"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
@@ -81,6 +86,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView16"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -90,6 +96,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -100,6 +107,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:text="计划结束"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/starttime"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -110,6 +118,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="计划开始"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -118,77 +127,67 @@
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginStart="52dp"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="12dp"
         android:gravity="center"
         android:text="任务列表"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView14" />
 
     <Button
-        android:id="@+id/createproject"
-        android:layout_width="140dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginTop="28dp"
-        android:text="新建任务"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recordlist" />
-
-    <Button
         android:id="@+id/change_description"
         android:layout_width="140dp"
         android:layout_height="40dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="16dp"
         android:text="修改描述"
-        app:layout_constraintStart_toEndOf="@+id/createproject"
+        app:layout_constraintStart_toEndOf="@+id/create_task"
         app:layout_constraintTop_toBottomOf="@+id/recordlist" />
 
     <Button
         android:id="@+id/pause"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:text="暂停"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/start" />
+        app:layout_constraintStart_toEndOf="@+id/start"
+        app:layout_constraintTop_toBottomOf="@+id/create_task" />
 
     <Button
         android:id="@+id/resume"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:text="恢复"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/pause" />
+        app:layout_constraintStart_toEndOf="@+id/pause"
+        app:layout_constraintTop_toBottomOf="@+id/create_task" />
 
     <Button
         android:id="@+id/finish"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:text="结束"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/resume" />
+        app:layout_constraintStart_toEndOf="@+id/resume"
+        app:layout_constraintTop_toBottomOf="@+id/create_task" />
 
     <Button
         android:id="@+id/cancel"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="12dp"
         android:text="取消"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/finish" />
+        app:layout_constraintStart_toEndOf="@+id/finish"
+        app:layout_constraintTop_toBottomOf="@+id/create_task" />
 
     <TextView
         android:id="@+id/textView19"
         android:layout_width="300dp"
         android:layout_height="30dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:gravity="center"
         android:text="记录列表"
         app:layout_constraintEnd_toEndOf="parent"
@@ -198,8 +197,8 @@
 
     <ListView
         android:id="@+id/tasklist"
-        android:layout_width="316dp"
-        android:layout_height="99dp"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
         android:layout_marginTop="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.494"
@@ -210,8 +209,8 @@
 
     <ListView
         android:id="@+id/recordlist"
-        android:layout_width="311dp"
-        android:layout_height="119dp"
+        android:layout_width="320dp"
+        android:layout_height="80dp"
         android:layout_marginTop="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -221,10 +220,20 @@
         android:id="@+id/start"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="12dp"
         android:text="开始"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/create_task" />
+
+    <Button
+        android:id="@+id/create_task"
+        android:layout_width="140dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="44dp"
+        android:layout_marginTop="16dp"
+        android:text="新建任务"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recordlist" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

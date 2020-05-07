@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -56,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
                         else  {
                             intent.putExtra("manager", new Gson().toJson(manager));
                             //第二种方法，使用接口
-                            //intent.putExtra("m",manager);
+                            //intent.putExtra("manager",manager);
                             startActivity(intent);
                         }
                     }

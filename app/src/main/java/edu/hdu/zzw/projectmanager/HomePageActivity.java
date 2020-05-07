@@ -5,8 +5,12 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 //import android.app.FragmentManager;
 
+import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -25,6 +29,8 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
     private ProjectFragment p;
     private TaskFragment t;
     private FragmentManager fragmentManager;
+    private ProjectManagerDB projectManagerDB;
+    private SQLiteDatabase sqL_read;
 
     Manager manager;
 
@@ -32,12 +38,22 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        projectManagerDB = ProjectManagerDB.getInstance(this);
+        sqL_read = projectManagerDB.getReadableDatabase();
+
+        String ManagerJson = getIntent().getStringExtra("manager");
+
+        manager = new Gson().fromJson(ManagerJson,Manager.class);
+        //Intent intent = getIntent();
+        //manager = (Manager) intent.getSerializableExtra("manager");
 
         fragmentManager = getSupportFragmentManager();
+
         menuBar = (RadioGroup)findViewById(R.id.menu_bar);
         menuBar.setOnCheckedChangeListener(this);
         menuBtn = (RadioButton)findViewById(R.id.project_btn);
         menuBtn.setChecked(true);
+
         pl.setOnButtonClick(new ProjectListFragment.OnButtonClick() {
             @Override
             public void onClick(View view) {
@@ -45,8 +61,7 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 hideAllFragment(fragmentTransaction);
                 Bundle bundle = new Bundle();
-                String ManagerJson = getIntent().getStringExtra("manager");
-                manager = new Gson().fromJson(ManagerJson,Manager.class);
+                manager = projectManagerDB.FindManagerByID(sqL_read, manager.getId());
                 bundle.putSerializable("manager",manager);
                 if(pc == null) {
                     pc = new ProjectCreateFragment();
@@ -56,6 +71,26 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
                 else {
                     fragmentTransaction.show(pc);
                 }
+                fragmentTransaction.commit();
+            }
+        });
+
+        pl.setOnListItemClick(new ProjectListFragment.OnListItemClick() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ProjectListFragment.MyAdapter myAdapter = (ProjectListFragment.MyAdapter) parent.getAdapter();
+                Project project = (Project) myAdapter.getItem(position);
+                menuBar.clearCheck();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                hideAllFragment(fragmentTransaction);
+                Bundle bundle = new Bundle();
+                manager = projectManagerDB.FindManagerByID(sqL_read, manager.getId());
+                bundle.putSerializable("manager",manager);
+                bundle.putSerializable("project",project);
+                //每一个listitem都要不同的fragment，每次都需要new
+                p = new ProjectFragment();
+                p.setArguments(bundle);
+                fragmentTransaction.add(R.id.fg_content,p);
                 fragmentTransaction.commit();
             }
         });

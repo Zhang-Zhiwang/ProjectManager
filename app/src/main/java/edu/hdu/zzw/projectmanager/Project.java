@@ -87,7 +87,7 @@ public class Project implements Serializable {
     }
 
     public String RecordList_toString() {
-        String str = String.join(",",TaskList);
+        String str = String.join(",",RecordList);
         return str;
     }
 

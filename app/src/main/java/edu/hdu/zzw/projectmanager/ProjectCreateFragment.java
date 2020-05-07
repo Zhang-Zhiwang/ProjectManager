@@ -4,9 +4,9 @@ import android.app.DatePickerDialog;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 
-import androidx.appcompat.widget.ButtonBarLayout;
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 
 /**
@@ -125,7 +126,7 @@ public class ProjectCreateFragment extends Fragment {
                 String start_time = startTime.getText().toString();
                 String end_time = endTime.getText().toString();
                 String _description = description.getText().toString();
-                String recordTime = sdf.format(ca.getTime());
+                String recordTime = sdf.format(new Date(System.currentTimeMillis()));
                 if(projectName.length() == 0 || start_time.length() == 0 || end_time.length() == 0)
                     Toast.makeText(getActivity(),"请输入项目名或选择时间",Toast.LENGTH_SHORT).show();
                 else {
@@ -137,6 +138,11 @@ public class ProjectCreateFragment extends Fragment {
                         Project project = new Project(projectName,manager.getId(),manager.getName(),_description,"","",start_time,end_time,recordTime);
                         projectManagerDB.add_project(sqLWrite, project);
                         Project project1 = projectManagerDB.FindProjectByName(sqLWrite, projectName);
+                        Record record = new Record(project1.getId(),project1.getName(),recordTime,"",Record.ISPROJECT,Record.CREATED);
+                        int id = projectManagerDB.add_record(sqLWrite, record);
+                        Record record1 = projectManagerDB.FindRecordByID(sqLWrite, id);
+                        project1.getRecordList().add(record1.getId()+"");
+                        projectManagerDB.update_project(sqLWrite, project1);
                         manager.getProjectList().add(project1.getId()+"");
                         projectManagerDB.update_manager(sqLWrite,manager);
                         Toast.makeText(getActivity(),"项目创建成功",Toast.LENGTH_SHORT).show();
@@ -157,6 +163,6 @@ public class ProjectCreateFragment extends Fragment {
         endTime = (TextView)view.findViewById(R.id.endtime);
         select_start_btn = (Button)view.findViewById(R.id.select_start_time);
         select_end_btn = (Button)view.findViewById(R.id.select_end_time);
-        create_btn = (Button)view.findViewById(R.id.createproject);
+        create_btn = (Button)view.findViewById(R.id.create_project);
     }
 }

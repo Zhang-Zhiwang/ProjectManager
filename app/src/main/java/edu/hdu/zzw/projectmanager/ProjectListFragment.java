@@ -5,9 +5,11 @@ import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -37,6 +39,7 @@ public class ProjectListFragment extends Fragment {
     private ListView projectList;
     private Button button;
     private OnButtonClick onButtonClick;
+    private OnListItemClick onListItemClick;
     private List<Project> list;
     //ProjectCreateFragment projectCreateFragment;
 
@@ -56,6 +59,14 @@ public class ProjectListFragment extends Fragment {
     }
     public void setOnButtonClick(OnButtonClick onButtonClick) {
         this.onButtonClick = onButtonClick;
+    }
+
+    public interface OnListItemClick {
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id);
+    }
+    public OnListItemClick getOnListItemClick() {return onListItemClick;}
+    public void setOnListItemClick(OnListItemClick onListItemClick) {
+        this.onListItemClick = onListItemClick;
     }
 
     /**
@@ -92,19 +103,30 @@ public class ProjectListFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_project_list, container, false);
         Bundle bundle = getArguments();
         manager = (Manager) bundle.getSerializable("manager");
+        //manager = projectManagerDB.FindManagerByID(sqLWrite,manager.getId());
         projectList = (ListView) view.findViewById(R.id.project_list);
         projectManagerDB = ProjectManagerDB.getInstance(getActivity());
         sqLWrite = projectManagerDB.getWritableDatabase();
         list = projectManagerDB.FindProjectListByIdList(sqLWrite,manager.getProjectList());
         projects = list.toArray(new Project[list.size()]);
         projectList.setAdapter(new MyAdapter());
-        button = view.findViewById(R.id.createproject);
+        button = view.findViewById(R.id.create_project);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(onButtonClick != null) {
                     onButtonClick.onClick(button);
                 }
+            }
+        });
+
+        projectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(onListItemClick != null) {
+                    onListItemClick.onItemClick(parent,view,position,id);
+                }
+
             }
         });
         return view;
