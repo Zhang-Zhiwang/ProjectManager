@@ -45,6 +45,24 @@ public class Task implements Serializable {
         }
     }
 
+    public Task(String name, int managerID, String managerName, int projectID, String projectName, String description, String recordList, String startTime, String endTime, String recordTime) {
+        //this.id = id;
+        this.name = name;
+        ManagerID = managerID;
+        ManagerName = managerName;
+        ProjectID = projectID;
+        ProjectName = projectName;
+        this.description = description;
+        StartTime = startTime;
+        EndTime = endTime;
+        RecordTime = recordTime;
+        if(recordList.equals("")) RecordList = new ArrayList<String>();
+        else{
+            String [] str = recordList.split(",");
+            RecordList = new ArrayList<String> (Arrays.asList(str));
+        }
+    }
+
     public Task() {
         this.RecordList = new ArrayList<String>();
     }

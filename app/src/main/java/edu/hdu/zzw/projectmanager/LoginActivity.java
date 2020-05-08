@@ -29,13 +29,16 @@ public class LoginActivity extends AppCompatActivity {
          * sqLite需要设计成单例模式
          * 以避免频繁地实例化
          * */
+        //初始化数据库
         projectManagerDB = ProjectManagerDB.getInstance(this);
         sqL_read = projectManagerDB.getReadableDatabase();
+        //绑定view
         username = (EditText)findViewById(R.id.username);
         password = (EditText)findViewById(R.id.password);
         login = (Button)findViewById(R.id.login);
         register = (Button)findViewById(R.id.register);
 
+        //监听登录按钮
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -66,6 +69,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        //监听注册按钮
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

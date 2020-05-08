@@ -10,7 +10,7 @@
     <EditText
         android:id="@+id/description"
         android:layout_width="180dp"
-        android:layout_height="40dp"
+        android:layout_height="54dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
         app:layout_constraintStart_toEndOf="@+id/textView12"
@@ -19,9 +19,10 @@
     <TextView
         android:id="@+id/textView12"
         android:layout_width="80dp"
-        android:layout_height="40dp"
+        android:layout_height="54dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         android:text="任务描述"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
@@ -42,6 +43,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/task_name" />
 
@@ -52,6 +54,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="8dp"
         android:text="任务负责人"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
@@ -62,6 +65,7 @@
         android:layout_marginStart="36dp"
         android:layout_marginTop="12dp"
         android:text="任务名称"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 
@@ -71,6 +75,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView16"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -80,6 +85,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView14"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -90,6 +96,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginTop="8dp"
         android:text="计划结束"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/starttime"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
@@ -100,13 +107,14 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="8dp"
         android:text="计划开始"
+        android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView12" />
 
     <ListView
-        android:id="@+id/recordlistlist"
-        android:layout_width="335dp"
-        android:layout_height="278dp"
+        android:id="@+id/recordlist"
+        android:layout_width="354dp"
+        android:layout_height="167dp"
         android:layout_marginTop="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.507"
@@ -118,7 +126,7 @@
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginStart="52dp"
-        android:layout_marginTop="28dp"
+        android:layout_marginTop="14dp"
         android:gravity="center"
         android:text="记录列表"
         app:layout_constraintStart_toStartOf="parent"
@@ -133,14 +141,14 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/recordlistlist" />
+        app:layout_constraintTop_toBottomOf="@+id/recordlist" />
 
     <Button
         android:id="@+id/pause"
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="66dp"
         android:text="暂停"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/start" />
@@ -150,7 +158,7 @@
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="66dp"
         android:text="恢复"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/pause" />
@@ -160,7 +168,7 @@
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="66dp"
         android:text="结束"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/resume" />
@@ -170,7 +178,7 @@
         android:layout_width="60dp"
         android:layout_height="50dp"
         android:layout_marginStart="16dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginBottom="66dp"
         android:text="取消"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/finish" />
@@ -179,8 +187,8 @@
         android:id="@+id/start"
         android:layout_width="60dp"
         android:layout_height="50dp"
-        android:layout_marginStart="24dp"
-        android:layout_marginBottom="16dp"
+        android:layout_marginStart="28dp"
+        android:layout_marginBottom="66dp"
         android:text="开始"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -191,6 +199,7 @@
         android:layout_height="40dp"
         android:layout_marginStart="36dp"
         android:layout_marginTop="12dp"
+        android:gravity="center"
         app:layout_constraintStart_toEndOf="@+id/textView7"
         app:layout_constraintTop_toBottomOf="@+id/textView8" />
 

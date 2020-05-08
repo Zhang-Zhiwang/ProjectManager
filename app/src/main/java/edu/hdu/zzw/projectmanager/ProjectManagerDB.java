@@ -86,20 +86,19 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
 
     /**增**/
     //向数据库添加一行manager数据，一般用于注册界面，使用前需要检测username是否重复
-    public void add_manager(SQLiteDatabase sqLiteDatabase, Manager manager) {
+    public int add_manager(SQLiteDatabase sqLiteDatabase, Manager manager) {
         ContentValues values = new ContentValues();
         //values.put("id",manager.getId());
         values.put("username",manager.getName());
         values.put("password",manager.getPassword());
         values.put("projectlist",manager.ProjectList_toString());
         values.put("tasklist",manager.TaskList_toString());
-        sqLiteDatabase.insert("manager",null,values);
-        Log.i("DBA",manager.TaskList_toString());
+        return (int) sqLiteDatabase.insert("manager",null,values);
         //sqLiteDatabase.close();
     }
 
     //向数据库添加一行project数据，一般用于单击button添加project，检测重复
-    public void add_project(SQLiteDatabase sqLiteDatabase, Project project) {
+    public int add_project(SQLiteDatabase sqLiteDatabase, Project project) {
         ContentValues values = new ContentValues();
         //values.put("id",project.getId());
         values.put("projectname",project.getName());
@@ -111,13 +110,12 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
         values.put("starttime",project.getStartTime());
         values.put("endtime",project.getEndTime());
         values.put("recordtime",project.getRecordTime());
-        sqLiteDatabase.insert("project",null,values);
+        return (int) sqLiteDatabase.insert("project",null,values);
         //sqLiteDatabase.close();
     }
 
     //向数据库添加一行task数据，一般用于单击button添加task，检测重复
-    @RequiresApi(api = Build.VERSION_CODES.O)
-    public void add_task(SQLiteDatabase sqLiteDatabase, Task task) {
+    public int add_task(SQLiteDatabase sqLiteDatabase, Task task) {
         ContentValues values = new ContentValues();
         values.put("taskname",task.getName());
         values.put("manager_id",task.getManagerID());
@@ -129,7 +127,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
         values.put("starttime",task.getStartTime());
         values.put("endtime",task.getEndTime());
         values.put("recordtime",task.getRecordTime());
-        sqLiteDatabase.insert("task",null,values);
+        return (int) sqLiteDatabase.insert("task",null,values);
         //sqLiteDatabase.close();
     }
 
@@ -489,7 +487,7 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
 
     //TaskName准确匹配
     public Task FindTaskByName(SQLiteDatabase sqLiteDatabase, String name) {
-        Cursor cursor = sqLiteDatabase.query("task",null,"tasktname=?",new String[]{name},null,null,null);
+        Cursor cursor = sqLiteDatabase.query("task",null,"taskname=?",new String[]{name},null,null,null);
         if(cursor.getCount() > 0) {
             cursor.moveToFirst();
             int id = cursor.getInt(cursor.getColumnIndex("id"));
@@ -698,6 +696,17 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
         values.put("endtime",task.getEndTime());
         values.put("recordtime",task.getRecordTime());
         sqLiteDatabase.update("task",values,"id=?",new String[] {task.getId()+""});
+    }
+
+    public void update_record(SQLiteDatabase sqLiteDatabase, Record record) {
+        ContentValues values = new ContentValues();
+        values.put("host_id",record.getHost_id());
+        values.put("host_name",record.getHost_name());
+        values.put("date",record.getDate());
+        values.put("description",record.getDescription());
+        values.put("hosttype",record.getHostType());
+        values.put("state",record.getState());
+        sqLiteDatabase.update("record",values,"id=?",new String[]{record.getId()+""});
     }
 
 }

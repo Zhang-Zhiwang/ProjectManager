@@ -81,11 +81,17 @@ public class ProjectCreateFragment extends Fragment {
         view =  inflater.inflate(R.layout.fragment_project_create, container, false);
         Bundle bundle = getArguments();
         manager = (Manager) bundle.getSerializable("manager");
+
+        //获得数据库
         projectManagerDB = ProjectManagerDB.getInstance(getActivity());
         sqLWrite = projectManagerDB.getWritableDatabase();
+        //绑定view
         initView(view);
+
         final Calendar ca = Calendar.getInstance();
         final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+
+        //选择开始时间
         select_start_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -103,6 +109,7 @@ public class ProjectCreateFragment extends Fragment {
 
         });
 
+        //选择结束时间
         select_end_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -119,6 +126,7 @@ public class ProjectCreateFragment extends Fragment {
             }
         });
 
+        //创建项目
         create_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -137,12 +145,16 @@ public class ProjectCreateFragment extends Fragment {
                     else {
                         Project project = new Project(projectName,manager.getId(),manager.getName(),_description,"","",start_time,end_time,recordTime);
                         projectManagerDB.add_project(sqLWrite, project);
+                        //写入数据库获得id
                         Project project1 = projectManagerDB.FindProjectByName(sqLWrite, projectName);
+                        //有了id才能创建record
                         Record record = new Record(project1.getId(),project1.getName(),recordTime,"",Record.ISPROJECT,Record.CREATED);
                         int id = projectManagerDB.add_record(sqLWrite, record);
                         Record record1 = projectManagerDB.FindRecordByID(sqLWrite, id);
+                        //更新project
                         project1.getRecordList().add(record1.getId()+"");
                         projectManagerDB.update_project(sqLWrite, project1);
+                        //获得project的id，然后更新manager
                         manager.getProjectList().add(project1.getId()+"");
                         projectManagerDB.update_manager(sqLWrite,manager);
                         Toast.makeText(getActivity(),"项目创建成功",Toast.LENGTH_SHORT).show();

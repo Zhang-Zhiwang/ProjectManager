@@ -61,6 +61,7 @@ public class ProjectListFragment extends Fragment {
         this.onButtonClick = onButtonClick;
     }
 
+    //查看项目详情item点击回调
     public interface OnListItemClick {
         public void onItemClick(AdapterView<?> parent, View view, int position, long id);
     }
@@ -111,6 +112,8 @@ public class ProjectListFragment extends Fragment {
         projects = list.toArray(new Project[list.size()]);
         projectList.setAdapter(new MyAdapter());
         button = view.findViewById(R.id.create_project);
+
+        //创建项目回调
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,6 +123,7 @@ public class ProjectListFragment extends Fragment {
             }
         });
 
+        //项目详情回调
         projectList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

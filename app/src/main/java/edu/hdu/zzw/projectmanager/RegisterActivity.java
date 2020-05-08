@@ -23,13 +23,16 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
+        //绑定view
         username_reg = (EditText)findViewById(R.id.username_register);
         password_reg = (EditText)findViewById(R.id.password_register);
         password_again = (EditText)findViewById(R.id.password_again);
         button = (Button)findViewById(R.id.register);
 
+        //获得数据库
         projectManagerDB = ProjectManagerDB.getInstance(this);
         sql_write = projectManagerDB.getWritableDatabase();
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

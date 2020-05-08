@@ -32,17 +32,19 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
     private ProjectManagerDB projectManagerDB;
     private SQLiteDatabase sqL_read;
 
-    Manager manager;
+    private Manager manager;
+    private Project project;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home_page);
+        //获得数据库
         projectManagerDB = ProjectManagerDB.getInstance(this);
         sqL_read = projectManagerDB.getReadableDatabase();
 
+        //获得从LoginActivity传递的manager
         String ManagerJson = getIntent().getStringExtra("manager");
-
         manager = new Gson().fromJson(ManagerJson,Manager.class);
         //Intent intent = getIntent();
         //manager = (Manager) intent.getSerializableExtra("manager");
@@ -51,9 +53,17 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
 
         menuBar = (RadioGroup)findViewById(R.id.menu_bar);
         menuBar.setOnCheckedChangeListener(this);
+
+        //创建三个fragment实例，否则监听会报错
+        menuBtn = (RadioButton)findViewById(R.id.task_btn);
+        menuBtn.setChecked(true);
+        menuBtn = (RadioButton)findViewById(R.id.search);
+        menuBtn.setChecked(true);
+        menuBar.clearCheck();
         menuBtn = (RadioButton)findViewById(R.id.project_btn);
         menuBtn.setChecked(true);
 
+        //项目列表回调按钮监听，实现切换fragment
         pl.setOnButtonClick(new ProjectListFragment.OnButtonClick() {
             @Override
             public void onClick(View view) {
@@ -75,11 +85,12 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
             }
         });
 
+        //项目列表实现item点击监听的回调，实现查看项目详情的fragment切换
         pl.setOnListItemClick(new ProjectListFragment.OnListItemClick() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 ProjectListFragment.MyAdapter myAdapter = (ProjectListFragment.MyAdapter) parent.getAdapter();
-                Project project = (Project) myAdapter.getItem(position);
+                project = (Project) myAdapter.getItem(position);
                 menuBar.clearCheck();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 hideAllFragment(fragmentTransaction);
@@ -90,13 +101,103 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
                 //每一个listitem都要不同的fragment，每次都需要new
                 p = new ProjectFragment();
                 p.setArguments(bundle);
+
+                //因为p是内部类中赋值的对象，到外部会丢失引用（大概），外部类（HomePageActivity）无法引用内部类的赋值，所以嵌套回调
+                p.setOnButtonClick(new ProjectFragment.OnButtonClick() {
+                    @Override
+                    public void onClick(View view) {
+                        menuBar.clearCheck();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        hideAllFragment(fragmentTransaction);
+                        Bundle bundle = new Bundle();
+                        manager = projectManagerDB.FindManagerByID(sqL_read, manager.getId());
+                        project = projectManagerDB.FindProjectByID(sqL_read, project.getId());
+                        bundle.putSerializable("manager",manager);
+                        bundle.putSerializable("project",project);
+                        if(tc == null) {
+                            tc = new TaskCreateFragment();
+                            tc.setArguments(bundle);
+                            fragmentTransaction.add(R.id.fg_content,tc);
+                        }
+                        else {
+                            fragmentTransaction.show(tc);
+                        }
+                        fragmentTransaction.commit();
+                    }
+                });
+
+                p.setOnListItemClick(new ProjectFragment.OnListItemClick() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ProjectFragment.TaskAdapter taskAdapter = (ProjectFragment.TaskAdapter) parent.getAdapter();
+                        Task task = (Task) taskAdapter.getItem(position);
+                        menuBar.clearCheck();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        hideAllFragment(fragmentTransaction);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("manager",manager);
+                        bundle.putSerializable("task",task);
+
+                        t = new TaskFragment();
+                        t.setArguments(bundle);
+                        fragmentTransaction.add(R.id.fg_content, t);
+                        fragmentTransaction.commit();
+                    }
+                });
+
                 fragmentTransaction.add(R.id.fg_content,p);
                 fragmentTransaction.commit();
             }
         });
+
+        tl.setOnListItemClick(new TaskListFragment.OnListItemClick() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                TaskListFragment.TaskAdapter taskAdapter = (TaskListFragment.TaskAdapter) parent.getAdapter();
+                Task task = (Task) taskAdapter.getItem(position);
+                menuBar.clearCheck();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                hideAllFragment(fragmentTransaction);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("manager",manager);
+                bundle.putSerializable("task",task);
+
+                t = new TaskFragment();
+                t.setArguments(bundle);
+                fragmentTransaction.add(R.id.fg_content, t);
+                fragmentTransaction.commit();
+            }
+        });
+
+        //项目详情页回调创建任务按钮
+        /*if(p == null) p = new ProjectFragment();
+        p.setOnButtonClick(new ProjectFragment.OnButtonClick() {
+            @Override
+            public void onClick(View view) {
+                menuBar.clearCheck();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                hideAllFragment(fragmentTransaction);
+                Bundle bundle = new Bundle();
+                manager = projectManagerDB.FindManagerByID(sqL_read, manager.getId());
+                project = projectManagerDB.FindProjectByID(sqL_read, project.getId());
+                bundle.putSerializable("manager",manager);
+                bundle.putSerializable("project",project);
+                if(tc == null) {
+                    tc = new TaskCreateFragment();
+                    tc.setArguments(bundle);
+                    fragmentTransaction.add(R.id.fg_content,tc);
+                }
+                else {
+                    fragmentTransaction.show(tc);
+                }
+                fragmentTransaction.commit();
+            }
+        });*/
     }
 
 
+
+    //底部导航栏切换fragment
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         hideAllFragment(fragmentTransaction);
@@ -135,7 +236,6 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
                     fragmentTransaction.show(se);
                 break;
         }
-        //fragmentTransaction.addToBackStack(null);
         fragmentTransaction.commit();
     }
 
