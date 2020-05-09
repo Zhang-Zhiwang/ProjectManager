@@ -169,30 +169,89 @@ public class HomePageActivity extends AppCompatActivity implements RadioGroup.On
             }
         });
 
-        //项目详情页回调创建任务按钮
-        /*if(p == null) p = new ProjectFragment();
-        p.setOnButtonClick(new ProjectFragment.OnButtonClick() {
+        se.setOnProjectListItemClick(new SearchFragment.OnProjectListItemClick() {
             @Override
-            public void onClick(View view) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SearchFragment.ProjectAdapter projectAdapter = (SearchFragment.ProjectAdapter)parent.getAdapter();
+                project = (Project)projectAdapter.getItem(position);
                 menuBar.clearCheck();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 hideAllFragment(fragmentTransaction);
                 Bundle bundle = new Bundle();
                 manager = projectManagerDB.FindManagerByID(sqL_read, manager.getId());
-                project = projectManagerDB.FindProjectByID(sqL_read, project.getId());
                 bundle.putSerializable("manager",manager);
                 bundle.putSerializable("project",project);
-                if(tc == null) {
-                    tc = new TaskCreateFragment();
-                    tc.setArguments(bundle);
-                    fragmentTransaction.add(R.id.fg_content,tc);
-                }
-                else {
-                    fragmentTransaction.show(tc);
-                }
+                //每一个listitem都要不同的fragment，每次都需要new
+                p = new ProjectFragment();
+                p.setArguments(bundle);
+
+                //因为p是内部类中赋值的对象，到外部会丢失引用（大概），外部类（HomePageActivity）无法引用内部类的赋值，所以嵌套回调
+                p.setOnButtonClick(new ProjectFragment.OnButtonClick() {
+                    @Override
+                    public void onClick(View view) {
+                        menuBar.clearCheck();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        hideAllFragment(fragmentTransaction);
+                        Bundle bundle = new Bundle();
+                        manager = projectManagerDB.FindManagerByID(sqL_read, manager.getId());
+                        project = projectManagerDB.FindProjectByID(sqL_read, project.getId());
+                        bundle.putSerializable("manager",manager);
+                        bundle.putSerializable("project",project);
+                        if(tc == null) {
+                            tc = new TaskCreateFragment();
+                            tc.setArguments(bundle);
+                            fragmentTransaction.add(R.id.fg_content,tc);
+                        }
+                        else {
+                            fragmentTransaction.show(tc);
+                        }
+                        fragmentTransaction.commit();
+                    }
+                });
+
+                p.setOnListItemClick(new ProjectFragment.OnListItemClick() {
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                        ProjectFragment.TaskAdapter taskAdapter = (ProjectFragment.TaskAdapter) parent.getAdapter();
+                        Task task = (Task) taskAdapter.getItem(position);
+                        menuBar.clearCheck();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                        hideAllFragment(fragmentTransaction);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("manager",manager);
+                        bundle.putSerializable("task",task);
+
+                        t = new TaskFragment();
+                        t.setArguments(bundle);
+                        fragmentTransaction.add(R.id.fg_content, t);
+                        fragmentTransaction.commit();
+                    }
+                });
+
+                fragmentTransaction.add(R.id.fg_content,p);
                 fragmentTransaction.commit();
             }
-        });*/
+        });
+
+        se.setOnTaskListItemClick(new SearchFragment.OnTaskListItemClick() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SearchFragment.TaskAdapter taskAdapter = (SearchFragment.TaskAdapter) parent.getAdapter();
+                Task task = (Task) taskAdapter.getItem(position);
+                menuBar.clearCheck();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                hideAllFragment(fragmentTransaction);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("manager",manager);
+                bundle.putSerializable("task",task);
+
+                t = new TaskFragment();
+                t.setArguments(bundle);
+                fragmentTransaction.add(R.id.fg_content, t);
+                fragmentTransaction.commit();
+            }
+        });
+
     }
 
 

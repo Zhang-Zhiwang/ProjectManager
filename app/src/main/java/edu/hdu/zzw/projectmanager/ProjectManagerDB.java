@@ -243,6 +243,26 @@ public class ProjectManagerDB extends SQLiteOpenHelper {
         }
     }
 
+    //搜索界面返回用户名列表
+    public List<String> FindManagerNameListByName (SQLiteDatabase sqLiteDatabase, String name) {
+        String sql = "select * from manager where username like '%" + name + "%'" + "order by id asc";
+        Cursor cursor = sqLiteDatabase.rawQuery(sql,null);
+        if(cursor.getCount() > 0) {
+            List<String> list = new ArrayList<String>();
+            String _name;
+            while(cursor.moveToNext()) {
+                _name = cursor.getString(1);
+                list.add(_name);
+            }
+            cursor.close();
+            return list;
+        }
+        else {
+            cursor.close();
+            return  new ArrayList<String>();
+        }
+    }
+
     //用getProjectList获得list，用where in从数据库取得数据
     public List<Project> FindProjectListByIdList (SQLiteDatabase sqLiteDatabase, List<String> projectList) {
         if(projectList.size() < 1) return new ArrayList<Project>();

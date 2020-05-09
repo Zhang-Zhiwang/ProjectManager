@@ -290,8 +290,8 @@ public class ProjectFragment extends Fragment implements View.OnClickListener{
             TextView projectName = (TextView)view.findViewById(R.id.project_name);
             TextView managerName = (TextView)view.findViewById(R.id.manager_name);
             taskName.setText(taskList.get(position).getName());
-            projectName.setText(project.getName());
-            managerName.setText(manager.getName());
+            projectName.setText(taskList.get(position).getProjectName());
+            managerName.setText(taskList.get(position).getManagerName());
             return view;
         }
     }

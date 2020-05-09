@@ -131,7 +131,7 @@ public class TaskListFragment extends Fragment {
             TextView managerName = (TextView)view.findViewById(R.id.manager_name);
             taskName.setText(taskList.get(position).getName());
             projectName.setText(taskList.get(position).getProjectName());
-            managerName.setText(manager.getName());
+            managerName.setText(taskList.get(position).getManagerName());
             return view;
         }
     }
